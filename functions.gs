@@ -9,7 +9,6 @@ function OCTOPART_SET_USER(email) {
 	return "Octopart Add-In is ready";
 }
 
-
 /**
  * <help goes here>
  *
@@ -31,7 +30,7 @@ function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
-	return "";
+	return "http://www.octopart.com";
 }
 
 /**
@@ -205,4 +204,3 @@ function OCTOPART_GET_INFO() {
 function OCTOPART_SET_OPTIONS() {
 	return false;
 }
-
