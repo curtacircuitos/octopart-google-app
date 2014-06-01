@@ -1,12 +1,12 @@
 /**
  * <help goes here>
- * 
+ *
  * @param {string} email refers to your email address. When you've entered it, the result will read: "Octopart Add-In is ready".
  * @returns {string}
  * @customfunction
  */
 function OCTOPART_SET_USER(email) {
-	return "Octopart Add-In is ready";
+  return "Octopart Add-In is ready";
 }
 
 /**
@@ -18,7 +18,7 @@ function OCTOPART_SET_USER(email) {
  * @customfunction
  */
 function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
-	return "";
+  return "";
 }
 
 /**
@@ -30,7 +30,7 @@ function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
-	return "http://www.octopart.com";
+  return "http://www.octopart.com";
 }
 
 /**
@@ -44,7 +44,7 @@ function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
-	return 0;
+  return 0;
 }
 
 
@@ -60,23 +60,38 @@ function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, qty, currency) {
-  // HACK ALERT: just to see how it works, simple hack, no error check, no filtering, nothing fancy.
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
 
-  qty = typeof qty !== 'undefined'? qty: 1;  
-  currency = typeof currency !== 'undefined'? currency: "USD";  
-  
-  var url = "";
-  url +=  "http://octopart.com/api/v3/parts/search?apikey=a76a384c";
-  url += "&q=" + mpn_or_sku;
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
 
-  var options = {
-    'method': 'get'
-  };
-  
-  var response = UrlFetchApp.fetch(url, options);
-  var result = JSON.parse(response.getContentText());
-  
-  return result.results[0].item.offers[0].prices[currency][0][1];
+  var parts = Parts.match(mpn_or_sku, manuf);
+
+  if (parts == null)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "no parts found";
+
+  var part = parts.results[0].items[0];
+
+  var offers = part.offers;
+
+  if (offers.length == 0)
+    return "no offer found";
+
+  var prices = offers[0].prices;
+  if (!currency in prices)
+    return "no offers in " + currency;
+
+  for (var i = prices[currency].length - 1; i >= 0; i--) {
+    var price = prices[currency][i];
+    if (price[0] <= qty)
+      return price[1];
+  }
+
+  return "no price for this quantity";
 }
 
 /**
@@ -91,7 +106,7 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, qty, currency) {
-	return 0;
+  return 0;
 }
 
 /**
@@ -104,7 +119,7 @@ function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf) {
-	return "http://www.octopart.com";
+  return "http://www.octopart.com";
 }
 
 /**
@@ -119,7 +134,7 @@ function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, qty, currency) {
-	return 0;
+  return 0;
 
 }
 
@@ -135,7 +150,7 @@ function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, qty, currency) {
-	return "";
+  return "";
 }
 
 /**
@@ -150,7 +165,7 @@ function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, qty, currency) {
-	return "";
+  return "";
 }
 
 /**
@@ -165,7 +180,7 @@ function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, qty, currency) {
-	return 1;
+  return 1;
 }
 
 /**
@@ -178,7 +193,7 @@ function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf) {
-	return 0;
+  return 0;
 }
 
 /**
@@ -190,7 +205,7 @@ function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_GET_INFO() {
-	return "0.1";
+  return "0.1";
 }
 
 /**
@@ -202,5 +217,5 @@ function OCTOPART_GET_INFO() {
  * @customfunction
  */
 function OCTOPART_SET_OPTIONS() {
-	return false;
+  return false;
 }
