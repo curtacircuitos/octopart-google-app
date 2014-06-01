@@ -59,7 +59,7 @@ function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
  * @returns {Number}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, qty, currency) {
+function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currency) {
   if (typeof mpn_or_sku === 'undefined')
     return 0;
 
@@ -105,7 +105,7 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, qty, currency) {
  * @returns {Number}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, qty, currency) {
+function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currency) {
   return 0;
 }
 
@@ -118,7 +118,7 @@ function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, qty, currency) {
  * @returns {string}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf) {
+function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
   return "http://www.octopart.com";
 }
 
@@ -133,7 +133,7 @@ function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf) {
  * @returns {Number}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, qty, currency) {
+function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency) {
   return 0;
 
 }
@@ -149,7 +149,7 @@ function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, qty, currency) {
  * @returns {string}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, qty, currency) {
+function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, currency) {
   return "";
 }
 
@@ -164,7 +164,7 @@ function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, qty, currency) {
  * @returns {string}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, qty, currency) {
+function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, currency) {
   return "";
 }
 
@@ -179,7 +179,7 @@ function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, qty, currency) {
  * @returns {Number}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, qty, currency) {
+function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty, currency) {
   return 1;
 }
 
@@ -192,7 +192,7 @@ function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, qty, currency) {
  * @returns {Number}
  * @customfunction
  */
-function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf) {
+function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf, distributor) {
   return 0;
 }
 
