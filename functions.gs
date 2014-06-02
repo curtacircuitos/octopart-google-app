@@ -66,7 +66,7 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
   qty = typeof qty !== 'undefined'? qty: 1;
   currency = typeof currency !== 'undefined'? currency: "USD";
 
-  var parts = Parts.match(mpn_or_sku, manuf);
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
 
   if (parts == null)
     return "server error";
@@ -75,23 +75,16 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
     return "no parts found";
 
   var part = parts.results[0].items[0];
-
   var offers = part.offers;
 
-  if (offers.length == 0)
-    return "no offer found";
+  var lowest_price = typeof distributor === undefined;
 
-  var prices = offers[0].prices;
-  if (!currency in prices)
-    return "no offers in " + currency;
-
-  for (var i = prices[currency].length - 1; i >= 0; i--) {
-    var price = prices[currency][i];
-    if (price[0] <= qty)
-      return price[1];
+  if (lowest_price) {
+    var offersByPrice = PartOffers.sortByPrice(offers, currency, qty);
+    return PartOffer.getPrice(offersByPrice[0], currency, qty);
+  } else {
+    return PartOffer.getPrice(offers[0], currency, qty);
   }
-
-  return "no price for this quantity";
 }
 
 /**
