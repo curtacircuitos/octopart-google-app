@@ -6,7 +6,7 @@ Please hold on, just a hack now, will improve soon.
 
 # Status
 
-Addon if feature complete compared to Excel add-in. But some work still needed to make sure everything is really alright (yes, I mean tests!).
+Addon is feature complete compared to Excel add-in now! But some work still needed to make sure everything is really alright (yes, I mean tests!).
 
 See some screenshots below.
 
