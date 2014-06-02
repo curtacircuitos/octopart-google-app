@@ -6,7 +6,7 @@ Please hold on, just a hack now, will improve soon.
 
 # Status
 
-API does not work yet! There is only one function (`OCTOPART_DISTRIBUTOR_PRICE`) with a very simple implementation. It uses Octopart API but is far from complete.
+Addon if feature complete compared to Excel add-in. But some work still needed to make sure everything is really alright (yes, I mean tests!).
 
 See some screenshots below.
 
