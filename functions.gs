@@ -18,7 +18,19 @@ function OCTOPART_SET_USER(email) {
  * @customfunction
  */
 function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
-  return "";
+  if (typeof mpn_or_sku === 'undefined')
+    return "not found";
+
+  var parts = Parts.match(mpn_or_sku, manuf);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  return part.octopart_url;
 }
 
 /**
@@ -30,7 +42,23 @@ function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
-  return "http://www.octopart.com";
+  if (typeof mpn_or_sku === 'undefined')
+    return "not found";
+
+  var parts = Parts.match(mpn_or_sku, manuf, null, ["include[]=datasheets"]);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var datasheets = part.datasheets;
+  if (!datasheets || datasheets.length == 0)
+    return "not found";
+
+  return datasheets[0].url;
 }
 
 /**
@@ -44,7 +72,24 @@ function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
-  return 0;
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
+
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  return PartOffers.getAvg(offers, currency, qty);
 }
 
 
@@ -54,9 +99,9 @@ function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
  * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
  * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @param {Number} [qty=1] searches for a particular quantity
+ * @param {number} [qty=1] searches for a particular quantity
  * @param {string} [currency=USD] searches for a particular currency
- * @returns {Number}
+ * @returns {number}
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currency) {
@@ -68,22 +113,20 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
 
   var parts = Parts.match(mpn_or_sku, manuf, distributor);
 
-  if (parts == null)
+  if (!parts)
     return "server error";
 
   if (parts.results[0].hits == 0)
-    return "no parts found";
+    return "not found";
 
   var part = parts.results[0].items[0];
   var offers = part.offers;
 
-  var lowest_price = typeof distributor === undefined;
-
-  if (lowest_price) {
-    var offersByPrice = PartOffers.sortByPrice(offers, currency, qty);
-    return PartOffer.getPrice(offersByPrice[0], currency, qty);
+  if (!distributor) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return PartOffers.getPrice(offers_by_price, currency, qty);
   } else {
-    return PartOffer.getPrice(offers[0], currency, qty);
+    return PartOffers.getPrice(offers, currency, qty);
   }
 }
 
@@ -99,7 +142,31 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currency) {
-  return 0;
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
+
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  // FIXME: we must make sure that the offer we are working with really have the currency we want.
+  var lowest_price = typeof distributor === "undefined";
+  if (lowest_price) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return offers_by_price[0].in_stock_quantity;
+  } else {
+    return offers[0].in_stock_quantity;
+  }
 }
 
 /**
@@ -112,8 +179,31 @@ function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currenc
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
-  return "http://www.octopart.com";
-}
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
+
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  // FIXME: we must make sure that the offer we are working with really have the currency we want.
+  var lowest_price = typeof distributor === "undefined";
+  if (lowest_price) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return offers_by_price[0].product_url;
+  } else {
+    return offers[0].product_url;
+  }}
 
 /**
  * <help goes here>
@@ -127,8 +217,31 @@ function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency) {
-  return 0;
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
 
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  // FIXME: we must make sure that the offer we are working with really have the currency we want.
+  var lowest_price = typeof distributor === "undefined";
+  if (lowest_price) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return offers_by_price[0].moq;
+  } else {
+    return offers[0].moq;
+  }
 }
 
 /**
@@ -143,7 +256,31 @@ function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency)
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, currency) {
-  return "";
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
+
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  // FIXME: we must make sure that the offer we are working with really have the currency we want.
+  var lowest_price = typeof distributor === "undefined";
+  if (lowest_price) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return offers_by_price[0].packaging;
+  } else {
+    return offers[0].packaging;
+  }
 }
 
 /**
@@ -158,7 +295,31 @@ function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, cur
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, currency) {
-  return "";
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
+
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  // FIXME: we must make sure that the offer we are working with really have the currency we want.
+  var lowest_price = typeof distributor === "undefined";
+  if (lowest_price) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return offers_by_price[0].factory_lead_days;
+  } else {
+    return offers[0].factory_lead_days;
+  }
 }
 
 /**
@@ -173,7 +334,31 @@ function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, cur
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty, currency) {
-  return 1;
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
+
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  // FIXME: we must make sure that the offer we are working with really have the currency we want.
+  var lowest_price = typeof distributor === "undefined";
+  if (lowest_price) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return offers_by_price[0].order_multiple;
+  } else {
+    return offers[0].order_multiple;
+  }
 }
 
 /**
@@ -186,7 +371,31 @@ function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty,
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf, distributor) {
-  return 0;
+  if (typeof mpn_or_sku === 'undefined')
+    return 0;
+
+  qty = typeof qty !== 'undefined'? qty: 1;
+  currency = typeof currency !== 'undefined'? currency: "USD";
+
+  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+
+  if (!parts)
+    return "server error";
+
+  if (parts.results[0].hits == 0)
+    return "not found";
+
+  var part = parts.results[0].items[0];
+  var offers = part.offers;
+
+  // FIXME: we must make sure that the offer we are working with really have the currency we want.
+  var lowest_price = typeof distributor === "undefined";
+  if (lowest_price) {
+    var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
+    return offers_by_price[0].sku;
+  } else {
+    return offers[0].sku;
+  }
 }
 
 /**
