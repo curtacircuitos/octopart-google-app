@@ -35,10 +35,13 @@ Parts.match = function(mpn_or_sku, manuf, distributor, includes) {
 
 var PartOffers = {};
 
-PartOffers.getPrice = function(offers, currency, qty) {
+PartOffers.getPrice = function(offers, currency, qty, distributor) {
   for (var i = 0; i < offers.length; i++) {
     if (!offers[i].prices.hasOwnProperty(currency))
       continue;
+
+    if (distributor && offers[i].seller.name != distributor)
+        continue;
 
     var prices = offers[i].prices[currency];
 
@@ -50,6 +53,20 @@ PartOffers.getPrice = function(offers, currency, qty) {
   }
 
   return 0;
+};
+
+PartOffers.getInStockQuantity = function(offers, distributor, currency) {
+  for (var i = 0; i < offers.length; i++) {
+    if (!offers[i].prices.hasOwnProperty(currency))
+      continue;
+
+    if (distributor && offers[i].seller.name != distributor)
+        continue;
+
+    return offers[i].in_stock_quantity;
+  }
+
+  throw "no offer found for this distributor or currency.";
 };
 
 

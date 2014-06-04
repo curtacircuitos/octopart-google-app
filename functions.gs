@@ -97,10 +97,10 @@ function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
  * <help goes here>
  *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @param {number} [qty=1] searches for a particular quantity
- * @param {string} [currency=USD] searches for a particular currency
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
+ * @param {number} qty searches for a particular quantity (default: 1)
+ * @param {string} currency searches for a particular currency (default: USD)
  * @returns {number}
  * @customfunction
  */
@@ -111,7 +111,7 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
   qty = typeof qty !== 'undefined'? qty: 1;
   currency = typeof currency !== 'undefined'? currency: "USD";
 
-  var parts = Parts.match(mpn_or_sku, manuf, distributor);
+  var parts = Parts.match(mpn_or_sku, manuf);
 
   if (!parts)
     return "server error";
@@ -126,7 +126,7 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
     var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
     return PartOffers.getPrice(offers_by_price, currency, qty);
   } else {
-    return PartOffers.getPrice(offers, currency, qty);
+    return PartOffers.getPrice(offers, currency, qty, distributor);
   }
 }
 
@@ -165,7 +165,7 @@ function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currenc
     var offers_by_price = PartOffers.sortByPrice(offers, currency, qty);
     return offers_by_price[0].in_stock_quantity;
   } else {
-    return offers[0].in_stock_quantity;
+    return PartOffers.getInStockQuantity(offers, distributor, currency);
   }
 }
 
