@@ -14,9 +14,18 @@ function Octopart() {
         url += "&" + includes[i];
     }
 
+    var cache = CacheService.getPublicCache();
+    var cached = cache.get(url);
+
+    if (cached != null)
+      return JSON.parse(cached);
+
     var response = UrlFetchApp.fetch(url, {method: 'get', muteHttpExceptions: true});
     if (response.getResponseCode() != 200)
       throw "something wrong... (HTTP " + response.getResponseCode() + ")";
+
+    Logger.log('(not cached) request ' + url);
+    cache.put(url, response, 60 * 60);
 
     return JSON.parse(response.getContentText());
   };
@@ -64,12 +73,15 @@ function Part(part) {
     for (var i = 0; i < this._part.offers.length; i++) {
       var offer = new PartOffer(this._part.offers[i]);
       if (offer.hasPriceInCurrency(currency)) {
-        sum += offer.getPrice(qty, currency);
-        sellers++;
+        var price = offer.getPrice(qty, currency);
+        if (!isNaN(price)) {
+          sum += price;
+          sellers += 1;
+        }
       }
     }
 
-    return sum / sellers;
+    return (sellers > 0? sum / sellers: 0);
   }
 
   this.getOffer = function(distributor, qty, currency) {
@@ -130,9 +142,12 @@ function PartOffer(offer) {
 
       price = this._offer.prices[currency][i][1];
     }
+
+    return price;
   }
 
   this.hasPriceInCurrency = function(currency) {
+    currency = typeof currency !== "undefined"? currency: "USD";
     return currency in this._offer.prices;
   }
 
