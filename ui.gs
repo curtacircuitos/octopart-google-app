@@ -2,10 +2,10 @@
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Octopart')
-      .addItem('Refresh all data', 'refresh')
+      .addItem('Upload BOM', 'upload')
       .addToUi();
 }
 
-function refresh() {
-  SpreadsheetApp.getUi().alert('Refresh will take place.');
+function upload() {
+  SpreadsheetApp.getUi().alert('Coming soon...');
 }

@@ -16,7 +16,6 @@ function Octopart() {
 
     var cache = CacheService.getPublicCache();
     var cached = cache.get(url);
-
     if (cached != null)
       return JSON.parse(cached);
 
@@ -24,7 +23,6 @@ function Octopart() {
     if (response.getResponseCode() != 200)
       throw "something wrong... (HTTP " + response.getResponseCode() + ")";
 
-    Logger.log('(not cached) request ' + url);
     cache.put(url, response, 60 * 60);
 
     return JSON.parse(response.getContentText());
@@ -72,16 +70,14 @@ function Part(part) {
 
     for (var i = 0; i < this._part.offers.length; i++) {
       var offer = new PartOffer(this._part.offers[i]);
-      if (offer.hasPriceInCurrency(currency)) {
-        var price = offer.getPrice(qty, currency);
-        if (!isNaN(price)) {
-          sum += price;
-          sellers += 1;
-        }
+      var price = offer.getPrice(qty, currency);
+      if (!isNaN(price)) {
+        sum += price;
+        sellers += 1;
       }
     }
 
-    return (sellers > 0? sum / sellers: 0);
+    return sellers > 0? sum/sellers: 0;
   }
 
   this.getOffer = function(distributor, qty, currency) {
@@ -100,10 +96,14 @@ function Part(part) {
       for (var i = 0; i < this._part.offers.length; i++) {
         var new_offer = new PartOffer(this._part.offers[i]);
 
-        if (!lowest_offer)
+        if (!lowest_offer && new_offer.hasPriceInCurrency(currency)) {
           lowest_offer = new_offer;
-        else
-          lowest_offer = new_offer.getPrice(qty, currency) < lowest_offer.getPrice(qty, currency)? new_offer: lowest_offer;
+        } else {
+          var new_offer_price = new_offer.getPrice(qty, currency);
+
+          if (!isNaN(new_offer_price))
+            lowest_offer = new_offer_price < lowest_offer.getPrice(qty, currency)? new_offer: lowest_offer;
+        }
       }
 
       return lowest_offer;
@@ -138,12 +138,12 @@ function PartOffer(offer) {
 
     for (var i = 0; i < this._offer.prices[currency].length; i++) {
       if (this._offer.prices[currency][i][0] > qty)
-        return price;
+        return parseFloat(price);
 
       price = this._offer.prices[currency][i][1];
     }
 
-    return price;
+    return parseFloat(price);
   }
 
   this.hasPriceInCurrency = function(currency) {
@@ -152,7 +152,7 @@ function PartOffer(offer) {
   }
 
   this.getInStockQuantity = function() {
-    return this._offer.in_stock_quantity;
+    return this._offer.in_stock_quantity !== null? parseInt(this._offer.in_stock_quantity): "unknown";
   }
 
   this.getSellerName = function() {
@@ -164,22 +164,22 @@ function PartOffer(offer) {
   }
 
   this.getMoq = function() {
-    return this._offer.moq;
+    return this._offer.moq !== null? parseInt(this._offer.moq): "unknown";
   }
 
   this.getPackaging = function() {
-    return this._offer.packaging;
+    return this._offer.packaging !== null? this._offer.packaging: "unknown";
   }
 
   this.getFactoryLeadTime = function() {
-    return this._offer.factory_lead_days;
+    return this._offer.factory_lead_days !== null? parseInt(this._offer.factory_lead_days): "unknown";
   }
 
   this.getOrderMultiple = function() {
-    return this._offer.order_multiple;
+    return this._offer.order_multiple !== null? parseInt(this._offer.order_multiple): "unknown";
   }
 
   this.getSku = function() {
-    return this._offer.sku;
+    return this._offer.sku !== null? this._offer.sku: "unknown";
   }
 };

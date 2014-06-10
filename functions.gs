@@ -1,8 +1,7 @@
 var octopart = new Octopart();
 
 /**
- * <help goes here>
- *
+ * Setup Octopart user to be used when uploading BOM
  * @param {string} email refers to your email address. When you've entered it, the result will read: "Octopart Add-In is ready".
  * @returns {string}
  * @customfunction
@@ -12,10 +11,8 @@ function OCTOPART_SET_USER(email) {
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
  * @returns {string}
  * @customfunction
  */
@@ -27,10 +24,8 @@ function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
  * @returns {string}
  * @customfunction
  */
@@ -42,13 +37,11 @@ function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {Number} [qty=1] searches for a particular quantity
- * @param {string} [currency=USD] searches for a particular currency
- * @returns {Number}
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {number} qty searches for a particular quantity (default: 1)
+ * @param {string} currency searches for a particular currency (default: USD)
+ * @returns {number}
  * @customfunction
  */
 
@@ -61,8 +54,6 @@ function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
 
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
  * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
  * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
@@ -80,14 +71,12 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @param {Number} [qty=1] searches for a particular quantity
- * @param {string} [currency=USD] searches for a particular currency
- * @returns {Number}
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
+ * @param {number} qty searches for a particular quantity (default: 1)
+ * @param {string} currency searches for a particular currency (default: USD)
+ * @returns {number}
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currency) {
@@ -99,11 +88,9 @@ function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currenc
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
  * @returns {string}
  * @customfunction
  */
@@ -116,14 +103,12 @@ function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @param {Number} [qty=1] searches for a particular quantity
- * @param {string} [currency=USD] searches for a particular currency
- * @returns {Number}
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
+ * @param {number} qty searches for a particular quantity (default: 1)
+ * @param {string} currency searches for a particular currency (default: USD)
+ * @returns {number}
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency) {
@@ -135,13 +120,11 @@ function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency)
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @param {Number} [qty=1] searches for a particular quantity
- * @param {string} [currency=USD] searches for a particular currency
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
+ * @param {number} qty searches for a particular quantity (default: 1)
+ * @param {string} currency searches for a particular currency (default: USD)
  * @returns {string}
  * @customfunction
  */
@@ -154,13 +137,11 @@ function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, cur
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @param {Number} [qty=1] searches for a particular quantity
- * @param {string} [currency=USD] searches for a particular currency
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
+ * @param {number} qty searches for a particular quantity (default: 1)
+ * @param {string} currency searches for a particular currency (default: USD)
  * @returns {string}
  * @customfunction
  */
@@ -173,14 +154,12 @@ function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, cur
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @param {Number} [qty=1] searches for a particular quantity
- * @param {string} [currency=USD] searches for a particular currency
- * @returns {Number}
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
+ * @param {number} qty searches for a particular quantity (default: 1)
+ * @param {string} currency searches for a particular currency (default: USD)
+ * @returns {number}
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty, currency) {
@@ -192,12 +171,10 @@ function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty,
 }
 
 /**
- * <help goes here>
- *
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
- * @param {string} [manuf=no limitation] limits the search result to the specified manufacturer, if desired
- * @param {string} [distributor=lowest price] specifies the distributor to search for
- * @returns {Number}
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} distributor specifies the distributor to search for (default: pick the lowest price)
+ * @returns {number}
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf, distributor) {
@@ -209,8 +186,6 @@ function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf, distributor) {
 }
 
 /**
- * <help goes here>
- *
  * This function simply returns the current version of the Add-In.
  *
  * @returns {string}
@@ -221,8 +196,6 @@ function OCTOPART_GET_INFO() {
 }
 
 /**
- * <help goes here>
- *
  * This function is a placeholder for future configurable options.
  *
  * @returns {boolean}
