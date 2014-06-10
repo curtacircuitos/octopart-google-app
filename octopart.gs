@@ -106,7 +106,10 @@ function Part(part) {
         }
       }
 
-      return lowest_offer;
+      if (lowest_offer != null)
+        return lowest_offer;
+      else
+        throw "No offers found.";
     }
 
     throw "No offers found.";
@@ -142,6 +145,9 @@ function PartOffer(offer) {
 
       price = this._offer.prices[currency][i][1];
     }
+
+    if (isNaN(price))
+      throw "No price found for this quantity/currency";
 
     return parseFloat(price);
   }
