@@ -6,12 +6,13 @@ Please hold on, just a hack now, will improve soon.
 
 # Status
 
-Addon is feature complete compared to Excel add-in now! But some work still needed to make sure everything is really alright (yes, I mean tests!).
+Addon is feature complete compared to Excel add-in now! Including the upload BOM feature. Enjoy!
 
 See some screenshots below.
 
 ![Shot 1](/shot1.png?raw=true)
 ![Shot 2](/shot2.png?raw=true)
+![Shot 3](/shot3.png?raw=true)
 
 # How to use?
 
