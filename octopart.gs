@@ -14,6 +14,7 @@ function Octopart() {
         url += "&" + includes[i];
     }
 
+    // we cache requests publicaly so all users will be able to benefit from it.
     var cache = CacheService.getPublicCache();
     var cached = cache.get(url);
     if (cached != null)
