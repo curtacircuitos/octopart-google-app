@@ -98,7 +98,10 @@ function Part(part) {
         var new_offer = new PartOffer(this._part.offers[i]);
 
         if (!lowest_offer && new_offer.hasPriceInCurrency(currency)) {
-          lowest_offer = new_offer;
+          var new_offer_price = new_offer.getPrice(qty, currency);
+
+          if (!isNaN(new_offer_price))
+            lowest_offer = new_offer;
         } else {
           var new_offer_price = new_offer.getPrice(qty, currency);
 
