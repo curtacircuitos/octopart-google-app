@@ -1,5 +1,3 @@
-var octopart = new Octopart();
-
 /**
  * Setup Octopart user to be used when uploading BOM
  * @param {string} email refers to your email address. When you've entered it, the result will read: "Octopart Add-In is ready".
@@ -17,6 +15,7 @@ function OCTOPART_SET_USER(email) {
  * @customfunction
  */
 function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -30,6 +29,7 @@ function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf, ["include[]=datasheets"]);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -46,6 +46,7 @@ function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
  */
 
 function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -63,6 +64,7 @@ function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currency) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -80,6 +82,7 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currency) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -95,6 +98,7 @@ function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currenc
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -112,6 +116,7 @@ function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -129,6 +134,7 @@ function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency)
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, currency) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -146,6 +152,7 @@ function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, cur
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, currency) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -163,6 +170,7 @@ function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, cur
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty, currency) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);
@@ -178,6 +186,7 @@ function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty,
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf, distributor) {
+  var octopart = new Octopart();
   var matches = octopart.match(mpn_or_sku, manuf);
   var result = matches.getResult(0);
   var part = result.getPart(0);

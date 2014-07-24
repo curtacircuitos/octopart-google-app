@@ -1,4 +1,8 @@
 
+function toBytes(str) {
+  return Utilities.newBlob(str).getBytes();
+}
+
 function Octopart() {
   this._api = "http://octopart.com/api/v3";
   this._apikey = "a76a384c";
@@ -20,11 +24,29 @@ function Octopart() {
     if (cached != null)
       return JSON.parse(cached);
 
+    var lock = LockService.getPublicLock();
+    var locked = lock.tryLock(30000);
+    if (!locked)
+      throw "too many concurrent users";
+
     var response = UrlFetchApp.fetch(url, {method: 'get', muteHttpExceptions: true});
-    if (response.getResponseCode() != 200)
+    // rate limiter?
+    if (response.getResponseCode() == 429) {
+      // wait and try again, we hold the lock, so everyone is waiting, be quick!
+      Utilities.sleep(1000);
+      response = UrlFetchApp.fetch(url, {method: 'get', muteHttpExceptions: true});
+    }
+
+    if (response.getResponseCode() != 200) {
+      lock.releaseLock();
       throw "something wrong... (HTTP " + response.getResponseCode() + ")";
+    }
 
     cache.put(url, response, 60 * 60);
+
+    lock.releaseLock();
+
+    Utilities.sleep(400);
 
     return JSON.parse(response.getContentText());
   };
@@ -37,6 +59,51 @@ function Octopart() {
     args.queries = [{"mpn_or_sku": mpn_or_sku, "brand": manuf}];
 
     return new PartsMatchResponse(this.request("/parts/match", args, includes));
+  };
+
+  this.upload = function() {
+    var url = "https://octopart.com/bom-lookup/upload";
+
+    var boundary = "15b909e62efccd31a1b0098eae5dba3db361743f";
+    var boundaryFull = "\r\n--" + boundary + "\r\n";
+
+    // start multipart bounday
+    var payload = toBytes(boundaryFull);
+    payload = payload.concat(toBytes("Content-Disposition: form-data; name=\"datafile\"; filename=\"filename.csv\"\r\n\r\n"));
+
+    // spreadsheet data
+    var sheet = SpreadsheetApp.getActiveSheet();
+    var range = sheet.getDataRange();
+    var data = range.getValues();
+
+    for (var i = 0; i < data.length; i++)
+      payload = payload.concat(toBytes(data[i].toString() + "\r\n"));
+
+    // end multipart boundary
+    payload = payload.concat(toBytes(boundaryFull));
+
+    var options = {
+      method: 'post',
+      payload: payload,
+      contentType: "multipart/form-data; boundary=" + boundary,
+      followRedirects: false,
+      muteHttpExceptions: true
+    };
+
+    var response = UrlFetchApp.fetch(url, options);
+
+    // TODO: not easy to give proper errors to user here.
+    if (response.getResponseCode() != 302) {
+      SpreadsheetApp.getUi().alert("Something wrong while uploading your BOM.");
+    } else {
+      var template = HtmlService.createTemplateFromFile('popup');
+      template.bom_url = response.getHeaders()["Location"];
+
+      var html = template.evaluate();
+      html.setHeight(300);
+
+      SpreadsheetApp.getUi().showModalDialog(html, 'BOM Upload');
+    }
   };
 }
 
