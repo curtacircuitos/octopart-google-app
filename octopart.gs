@@ -92,18 +92,10 @@ function Octopart() {
 
     var response = UrlFetchApp.fetch(url, options);
 
-    // TODO: not easy to give proper errors to user here.
-    if (response.getResponseCode() != 302) {
-      SpreadsheetApp.getUi().alert("Something wrong while uploading your BOM.");
-    } else {
-      var template = HtmlService.createTemplateFromFile('popup');
-      template.bom_url = response.getHeaders()["Location"];
-
-      var html = template.evaluate();
-      html.setHeight(300);
-
-      SpreadsheetApp.getUi().showModalDialog(html, 'BOM Upload');
-    }
+    if (response.getResponseCode() == 302)
+      return response.getHeaders()["Location"];
+    else
+      throw "There was an error while uploading your BOM. Please try again later.";
   };
 }
 

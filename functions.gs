@@ -15,11 +15,15 @@ function OCTOPART_SET_USER(email) {
  * @customfunction
  */
 function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  return part.getOctopartUrl();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    return part.getOctopartUrl();
+  } catch (e) {
+    return "No offer found";
+  }
 }
 
 /**
@@ -29,11 +33,15 @@ function OCTOPART_DETAIL_URL(mpn_or_sku, manuf) {
  * @customfunction
  */
 function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf, ["include[]=datasheets"]);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  return part.getDatasheetUrl(0);
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf, ["include[]=datasheets"]);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    return part.getDatasheetUrl(0);
+  } catch (e) {
+    return "No offer found";
+  }
 }
 
 /**
@@ -46,11 +54,15 @@ function OCTOPART_DATASHEET_URL(mpn_or_sku, manuf) {
  */
 
 function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  return part.getAveragePrice(qty, currency);
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    return part.getAveragePrice(qty, currency);
+  } catch (e) {
+    return "No offer found";
+  }
 }
 
 
@@ -64,12 +76,16 @@ function OCTOPART_AVERAGE_PRICE(mpn_or_sku, manuf, qty, currency) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currency) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor, qty, currency);
-  return offer.getPrice(qty, currency);
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor, qty, currency);
+    return offer.getPrice(qty, currency);
+  } catch (e) {
+    return "No offer found";
+  }
 }
 
 /**
@@ -82,12 +98,17 @@ function OCTOPART_DISTRIBUTOR_PRICE(mpn_or_sku, manuf, distributor, qty, currenc
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currency) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor, qty, currency);
-  return offer.getInStockQuantity();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor, qty, currency);
+    return offer.getInStockQuantity();
+  } catch (e) {
+    return "No offer found";
+  }
+
 }
 
 /**
@@ -98,12 +119,16 @@ function OCTOPART_DISTRIBUTOR_STOCK(mpn_or_sku, manuf, distributor, qty, currenc
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor);
-  return offer.getSellerUrl();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor);
+    return offer.getSellerUrl();
+  } catch (e) {
+    return "No offer found";
+  }
 }
 
 /**
@@ -116,12 +141,17 @@ function OCTOPART_DISTRIBUTOR_URL(mpn_or_sku, manuf, distributor) {
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor, qty, currency);
-  return offer.getMoq();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor, qty, currency);
+    return offer.getMoq();
+  } catch (e) {
+    return "No offer found";
+  }
+
 }
 
 /**
@@ -134,12 +164,17 @@ function OCTOPART_DISTRIBUTOR_MOQ(mpn_or_sku, manuf, distributor, qty, currency)
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, currency) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor, qty, currency);
-  return offer.getPackaging();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor, qty, currency);
+    return offer.getPackaging();
+  } catch (e) {
+    return "No offer found";
+  }
+
 }
 
 /**
@@ -152,12 +187,17 @@ function OCTOPART_DISTRIBUTOR_PACKAGING(mpn_or_sku, manuf, distributor, qty, cur
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, currency) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor, qty, currency);
-  return offer.getFactoryLeadTime();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor, qty, currency);
+    return offer.getFactoryLeadTime();
+  } catch (e) {
+    return "No offer found";
+  }
+
 }
 
 /**
@@ -170,12 +210,17 @@ function OCTOPART_DISTRIBUTOR_LEAD_TIME(mpn_or_sku, manuf, distributor, qty, cur
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty, currency) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor, qty, currency);
-  return offer.getOrderMultiple();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor, qty, currency);
+    return offer.getOrderMultiple();
+  } catch (e) {
+    return "No offer found";
+  }
+
 }
 
 /**
@@ -186,12 +231,17 @@ function OCTOPART_DISTRIBUTOR_ORDER_MUTIPLE(mpn_or_sku, manuf, distributor, qty,
  * @customfunction
  */
 function OCTOPART_DISTRIBUTOR_SKU(mpn_or_sku, manuf, distributor) {
-  var octopart = new Octopart();
-  var matches = octopart.match(mpn_or_sku, manuf);
-  var result = matches.getResult(0);
-  var part = result.getPart(0);
-  var offer = part.getOffer(distributor);
-  return offer.getSku();
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    var offer = part.getOffer(distributor);
+    return offer.getSku();
+  } catch (e) {
+    return "No offer found";
+  }
+
 }
 
 /**

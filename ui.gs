@@ -5,9 +5,7 @@ function onInstall(e) {
 
 function onOpen(e) {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('Octopart')
-      .addItem('Upload BOM', 'upload')
-      .addToUi();
+  ui.createAddonMenu().addItem('Upload BOM...', 'showSidebar').addToUi();
 }
 
 /*
@@ -17,7 +15,13 @@ function onOpen(e) {
  * https://code.google.com/p/google-apps-script-issues/issues/detail?id=1387
  */
 
-function upload() {
+function showSidebar() {
+  var ui = SpreadsheetApp.getUi();
+  var sidebar = HtmlService.createHtmlOutputFromFile("sidebar").setTitle("Upload BOM");
+  SpreadsheetApp.getUi().showSidebar(sidebar);
+}
+
+function uploadBOM() {
   var octopart = new Octopart();
-  octopart.upload();
+  return octopart.upload();
 }

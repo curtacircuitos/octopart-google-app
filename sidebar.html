@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+
+<style>
+ .branding-below {
+   bottom: 56px;
+   top: 0;
+ }
+</style>
+
+<div class="sidebar branding-below">
+
+ <img src="http://n1.octostatic.com/o3web/home/logo_588_132.f015017db49492d7819b870b73552594.png" width="200" height="44"/>
+
+ <div class="block">
+   Upload the BOM data in your sheet to Octopart
+ </div>
+
+ <div class="block">
+   <button class="action" onclick="upload();">Upload</button>
+ </div>
+
+ <div id="upload-success" class="block" style="display: none">
+   <p>Your data has been uploaded to Octopart.</p>
+   <p>Finish your BOM setup <a href="" id="bom-link">here</a></p>
+ </div>
+
+ <div id="upload-failure" class="block" style="display: none">
+   <span class="error" id="bom-error"></span>
+ </div>
+
+</div>
+
+<div class="sidebar bottom">
+  <span class="gray"><img src="http://n1.octostatic.com/o3web/shared/bugbw.499689e6cb54db812141d2f985886084.png" width="16" height="16"/> Octopart</span>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+
+ function onUploadSuccess(url) {
+    $("#bom-link").attr("href", url);
+    $("#upload-success").show();
+ }
+
+ function onUploadFailure(error) {
+    $("#bom-error").text(error);
+    $("#upload-failure").show();
+ }
+
+ function upload() {
+   $("#upload-success").hide();
+   $("#upload-failure").hide();
+
+   google.script.run.withSuccessHandler(onUploadSuccess)
+                    .withFailureHandler(onUploadFailure)
+                    .uploadBOM();
+ }
+
+</script>
+
