@@ -56,7 +56,7 @@ function Octopart() {
       throw "mpn or sku is required";
 
     var args = {};
-    args.queries = [{"mpn_or_sku": mpn_or_sku, "brand": manuf}];
+    args.queries = [{"mpn_or_sku": String(mpn_or_sku), "brand": String(manuf)}];
 
     return new PartsMatchResponse(this.request("/parts/match", args, includes));
   };
