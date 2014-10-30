@@ -10,6 +10,14 @@ function Octopart() {
   this.request = function (endpoint, args, includes) {
     var url = this._api + endpoint + "?apikey=" + this._apikey;
 
+
+    // add userkey if available
+    var user_props = PropertiesService.getUserProperties();
+    var user_key = user_props.getProperty("user_key");
+
+    if (user_key)
+      url += "&userkey=" + encodeURIComponent(JSON.stringify(user_key));
+
     for (var key in args)
       url += "&" + key + "=" + encodeURIComponent(JSON.stringify(args[key]));
 

@@ -5,6 +5,8 @@
  * @customfunction
  */
 function OCTOPART_SET_USER(email) {
+  var user_props = PropertiesService.getUserProperties();
+  user_props.setProperty("user_key", String(email));
   return "Octopart Add-In is ready";
 }
 
