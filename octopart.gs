@@ -63,8 +63,13 @@ function Octopart() {
     if (typeof mpn_or_sku === "undefined")
       throw "mpn or sku is required";
 
+    manuf = typeof manuf !== "undefined"? manuf: null;
+
     var args = {};
-    args.queries = [{"mpn_or_sku": String(mpn_or_sku), "brand": String(manuf)}];
+    args.queries = [{"mpn_or_sku": String(mpn_or_sku)}];
+
+    if (manuf)
+      args.queries[0]["brand"] = String(manuf);
 
     return new PartsMatchResponse(this.request("/parts/match", args, includes));
   };
