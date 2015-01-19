@@ -265,3 +265,23 @@ function OCTOPART_GET_INFO() {
 function OCTOPART_SET_OPTIONS() {
   return false;
 }
+
+/**
+ * Custom function to get a part's short description.
+ * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @returns {string}
+ * @customfunction
+*/
+function OCTOPART_GET_DESCRIPTION(mpn_or_sku, manuf) {
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf, ['include[]=short_description']);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    return part.getDescription();
+  }
+  catch (e) {
+     return "(no description retrieved)";
+  }
+}

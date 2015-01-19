@@ -195,6 +195,10 @@ function Part(part) {
     return this._part.octopart_url;
   }
 
+  this.getDescription = function() {
+    return this._part.short_description || '(no description retrieved)';
+  }
+
   this.getDatasheetUrl = function(index) {
     if (!"datasheets" in this._part || this._part.datasheets.length <= index)
       throw "No datasheets found.";
