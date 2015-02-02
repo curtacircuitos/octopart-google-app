@@ -205,6 +205,31 @@ function Part(part) {
 
     return this._part.datasheets[0].url;
   }
+  
+ 
+   //This fuction return only url of large and medium sized pictures.
+    this.getImageSets = function() {
+ 
+
+    for(var i=0; i<this._part.imagesets.length;i++)
+    {
+      if(this._part.imagesets[i].attribution.sources[0].name != "TME" && this._part.imagesets[i].attribution.sources[0].name !="DKO Electronshik") //optional : only to exclude sources with watermark
+      {
+        if(this._part.imagesets[i].large_image != null)
+          return this._part.imagesets[i].large_image.url;       
+      }    
+    }
+    for(var j=0; j<this._part.imagesets.length;j++)
+    {
+      if(this._part.imagesets[j].attribution.sources[0].name != "TME" && this._part.imagesets[j].attribution.sources[0].name != "DKO Electronshik")
+      {
+        if(this._part.imagesets[j].medium_image != null)
+          return this._part.imagesets[j].medium_image.url;
+       
+      }    
+    }
+    throw "No images found."
+  }
 };
 
 function PartOffer(offer) {
