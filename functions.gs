@@ -285,3 +285,22 @@ function OCTOPART_GET_DESCRIPTION(mpn_or_sku, manuf) {
      return "(no description retrieved)";
   }
 }
+
+/**
+ * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
+ * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @returns {string}
+ * @customfunction
+ */
+function OCTOPART_GET_IMAGE(mpn_or_sku, manuf) {
+  try {
+    var octopart = new Octopart();
+    var matches = octopart.match(mpn_or_sku, manuf, ['include[]=imagesets']);
+    var result = matches.getResult(0);
+    var part = result.getPart(0);
+    return part.getImageSets();
+  }
+  catch (e) {
+     return "(no image retrieved)";
+  }
+}
