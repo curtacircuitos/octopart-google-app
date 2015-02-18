@@ -273,7 +273,7 @@ function OCTOPART_SET_OPTIONS() {
  * @returns {string}
  * @customfunction
 */
-function OCTOPART_GET_DESCRIPTION(mpn_or_sku, manuf) {
+function OCTOPART_DESCRIPTION(mpn_or_sku, manuf) {
   try {
     var octopart = new Octopart();
     var matches = octopart.match(mpn_or_sku, manuf, ['include[]=short_description']);
@@ -289,16 +289,17 @@ function OCTOPART_GET_DESCRIPTION(mpn_or_sku, manuf) {
 /**
  * @param {string} mpn_or_sku is the search term. Search for components by manufacturer and/or part number. Part number terms may contain wildcards (“*”) but must also contain at least three non-wildcard characters.
  * @param {string} manuf limits the search result to the specified manufacturer, if desired (default: no limitation)
+ * @param {string} size the desired image size (small, medium, large or swatch) (default: small)
  * @returns {string}
  * @customfunction
  */
-function OCTOPART_GET_IMAGE(mpn_or_sku, manuf) {
+function OCTOPART_IMAGE(mpn_or_sku, manuf, size) {
   try {
     var octopart = new Octopart();
     var matches = octopart.match(mpn_or_sku, manuf, ['include[]=imagesets']);
     var result = matches.getResult(0);
     var part = result.getPart(0);
-    return part.getImageSets();
+    return part.getImageUrl(size);
   }
   catch (e) {
      return "(no image retrieved)";

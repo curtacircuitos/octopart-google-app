@@ -205,20 +205,22 @@ function Part(part) {
 
     return this._part.datasheets[0].url;
   }
-  
- 
-   //This fuction return only url of large and medium sized pictures.
-    this.getImageSets = function() {
-    for(var i=0; i<this._part.imagesets.length;i++){
-        if(this._part.imagesets[i].large_image != null)
-          return this._part.imagesets[i].large_image.url;       
+
+  this.getImageUrl = function(size) {
+    size = typeof size !== "undefined"? size: "small";
+
+    for(var i = 0; i < this._part.imagesets.length; i++) {
+        if (size === "large" && this._part.imagesets[i].large_image !== null)
+          return this._part.imagesets[i].large_image.url;
+        if (size === "medium" && this._part.imagesets[i].medium_image !== null)
+          return this._part.imagesets[i].medium_image.url;
+        if (size === "small" && this._part.imagesets[i].small_image !== null)
+          return this._part.imagesets[i].small_image.url;
+        if (size === "swatch" && this._part.imagesets[i].swatch_image !== null)
+          return this._part.imagesets[i].swatch_image.url;
     }
-    for(var j=0; j<this._part.imagesets.length;j++){
-      
-        if(this._part.imagesets[j].medium_image != null)
-          return this._part.imagesets[j].medium_image.url;
-    }
-    throw "No images found."
+
+    throw "No image found."
   }
 };
 
