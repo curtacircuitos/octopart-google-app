@@ -1,4 +1,3 @@
-
 function toBytes(str) {
   return Utilities.newBlob(str).getBytes();
 }
@@ -151,6 +150,30 @@ function Part(part) {
     }
 
     return sellers > 0? sum/sellers: 0;
+  }
+  
+  this.getMedianPrice = function(qty, currency) {
+    var sellers = 0;
+    var prices = new Array();
+    
+    qty = typeof qty !== "undefined"? qty: 1000;
+    currency = typeof currency !== "undefined"? currency: "USD";
+
+    for (var i = 0; i < this._part.offers.length; i++) {
+      var offer = new PartOffer(this._part.offers[i]);
+      var price = offer.getPrice(qty, currency);
+      if (!isNaN(price)) {
+        prices[sellers] = price;
+        sellers += 1;
+      }
+    }
+    prices.sort();
+    if(sellers%2) {
+      return prices[Math.floor(sellers/2)];
+    } else {
+      return (prices[sellers/2-1]+prices[sellers/2])/2;
+    }
+    
   }
 
   this.getOffer = function(distributor, qty, currency) {
