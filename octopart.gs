@@ -152,7 +152,20 @@ function Part(part) {
 
     return sellers > 0? sum/sellers: 0;
   }
-
+  
+    this.getIndustryStock = function() {
+    var sum = 0;
+    var sellers = 0;
+    for (var i = 0; i < this._part.offers.length; i++) {
+      var offer = new PartOffer(this._part.offers[i]);
+      var stock = offer.getInStockQuantity();
+      console.error('Stock:' + stock + '@' + offer.getSellerName());
+      sum += stock;
+      console.error('Sum:' + sum);
+    }
+    return sum;
+  }
+  
   this.getOffer = function(distributor, qty, currency) {
     qty = typeof qty !== "undefined"? qty: 1;
     currency = typeof currency !== "undefined"? currency: "USD";
